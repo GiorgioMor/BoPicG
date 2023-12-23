@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CardReturnDTO } from 'src/dto/cardReturnDto';
 import { A, O, P, S, U, Card } from 'src/dto/carddto';
 
 @Component({
