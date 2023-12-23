@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
-import { interval } from 'rxjs';
-import { A, O, P, S, U, Card } from 'src/dto/carddto';
+import { interval, map, takeWhile, timer } from 'rxjs';
+import { A, O, P, S, U, Card, Category } from 'src/dto/carddto';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +13,13 @@ import { A, O, P, S, U, Card } from 'src/dto/carddto';
 export class AppComponent implements OnInit {
 
   curSec: number = 0;
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   mode: ProgressBarMode = 'determinate';
   value = 100;
   bufferValue = 100;
+  dice: number | undefined;
+
+  timer: number = 70;
 
   categories: string[][] = [['P', 'yellow', 'Persone/Luoghi/Animali'], ['O', 'navy', 'Oggetti'], ['A', 'grey', 'Azioni'], ['?', 'green', 'Difficoltà'], ['S', 'red', 'Sfida']];
 
@@ -105,21 +108,44 @@ export class AppComponent implements OnInit {
     this.cat = cat;
     this.card = this.cardList.get(rndInt);
 
-    this.startTimer(70);
+    switch(cat) {
+      case 'P':
+        if(this.card?.p?.value)
+          this.startTimer();
+        break;
+      case 'O':
+        if(this.card?.o?.value)
+          this.startTimer();
+        break;
+      case 'A':
+        if(this.card?.a?.value)
+          this.startTimer();
+        break;
+      case '?':
+        if(this.card?.u?.value)
+          this.startTimer();
+        break;
+    }
   }
 
-  startTimer(seconds: number) {
-    const time = seconds;
+  startTimer() {
+    this.value = 100;
+
+    const time = this.timer;
     const timer$ = interval(1000);
 
     const sub = timer$.subscribe((sec) => {
-      this.bufferValue = 100 - sec * 100 / seconds;
+      this.value = 100 - sec * 100 / time;
       this.curSec = sec;
 
-      if (this.curSec === seconds) {
+      if (this.curSec === time) {
         sub.unsubscribe();
       }
     });
+  }
+
+  rollDice() {
+    this.dice = this.randomIntFromInterval(1, 6);
   }
 
   setCat(cat: string) {

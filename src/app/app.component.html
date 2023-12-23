@@ -1,8 +1,8 @@
-<div class="p-3 bg-primary text-white text-center">
-  <h1>BoPic</h1>
+<div class="p-1 bg-primary text-white text-center">
+  <h1 class="m-0">BoPic</h1>
 </div>
 
-<div class="container mt-5 ml-2 mr-2">
+<div class="container mt-3 ml-2 mr-2">
   <div class="row">
     <div class=" col-sm-2 d-grid gap-2 mx-auto pb-3">
       <button *ngFor="let cat of categories" type="button" class="btn"
@@ -13,6 +13,8 @@
         [class.btn-danger]="cat[1] == 'red'"
         (click)="setCat(cat[2]); drawCard(cat[0])">{{ cat[0] }}
       </button>
+      <hr>
+      <button type="button" class="btn btn-outline-primary" (click)="rollDice()">Indovinato -> {{ this.dice }}</button>
     </div>
     <div class="col-sm-8">
       <h2>Categoria selezionata: {{ this.catShow }}</h2>
@@ -20,14 +22,18 @@
       <p class="fs-2" *ngIf="this.cat == 'O'"> Sfida: {{ this.card?.o?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.o?.word }} </p>
       <p class="fs-2" *ngIf="this.cat == 'A'"> Sfida: {{ this.card?.a?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.a?.word }} </p>
       <p class="fs-2" *ngIf="this.cat == '?'"> Sfida: {{ this.card?.u?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.u?.word }} </p>
-      <p class="fs-2" *ngIf="this.cat == 'S'"> Sfida: {{ this.card?.s?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.s?.word }} </p>
+      <p class="fs-2" *ngIf="this.cat == 'S'"> Sfida: Si <br> Parola: {{ this.card?.s?.word }} </p>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-8">
-      <div class="progress px-0">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
-      </div>
+    <div class="col-sm-12">
+      <mat-progress-bar
+          class="example-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="value"
+          [bufferValue]="bufferValue">
+      </mat-progress-bar>
     </div>
   </div>
 </div>
