@@ -2,7 +2,7 @@ export class Category {
   constructor(
     public category: string,
     public color: string,
-    public value?: number,
+    public value: number = 0,
     public word?: string
   ) {}
 }

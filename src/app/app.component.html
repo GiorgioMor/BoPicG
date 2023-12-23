@@ -11,16 +11,16 @@
         [class.btn-secondary]="cat[1] == 'grey'"
         [class.btn-success]="cat[1] == 'green'"
         [class.btn-danger]="cat[1] == 'red'"
-        (click)="drawCard(cat[0])">{{ cat[0] }}
+        (click)="setCat(cat[2]); drawCard(cat[0])">{{ cat[0] }}
       </button>
     </div>
     <div class="col-sm-8">
-      <h6>Categoria selezionata: {{ this.cat }} - Carta N°: {{ this.nCard }}</h6>
-      <p *ngIf="this.cat == 'P'"> Valore: {{ this.card?.p?.value }} - Parola: {{ this.card?.p?.word }} </p>
-      <p *ngIf="this.cat == 'O'"> Valore: {{ this.card?.o?.value }} - Parola: {{ this.card?.o?.word }} </p>
-      <p *ngIf="this.cat == 'A'"> Valore: {{ this.card?.a?.value }} - Parola: {{ this.card?.a?.word }} </p>
-      <p *ngIf="this.cat == '?'"> Valore: {{ this.card?.u?.value }} - Parola: {{ this.card?.u?.word }} </p>
-      <p *ngIf="this.cat == 'S'"> Valore: {{ this.card?.s?.value }} - Parola: {{ this.card?.s?.word }} </p>
+      <h2>Categoria selezionata: {{ this.catShow }}</h2>
+      <p class="fs-2" *ngIf="this.cat == 'P'"> Sfida: {{ this.card?.p?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.p?.word }} </p>
+      <p class="fs-2" *ngIf="this.cat == 'O'"> Sfida: {{ this.card?.o?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.o?.word }} </p>
+      <p class="fs-2" *ngIf="this.cat == 'A'"> Sfida: {{ this.card?.a?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.a?.word }} </p>
+      <p class="fs-2" *ngIf="this.cat == '?'"> Sfida: {{ this.card?.u?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.u?.word }} </p>
+      <p class="fs-2" *ngIf="this.cat == 'S'"> Sfida: {{ this.card?.s?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.s?.word }} </p>
     </div>
   </div>
   <div class="row">
