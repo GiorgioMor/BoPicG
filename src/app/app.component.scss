@@ -1,4 +1,21 @@
-.fakeimg {
-    height: 200px;
-    background: #aaa;
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.footer p::after {
+  content: '\2764'; /* Codice Unicode per il carattere del cuore */
+  font-size: 20px; /* Dimensione del cuore */
+  margin-right: 5px; /* Spazio tra il cuore e il testo */
+}
+
+.footer p {
+  margin: 0;
+  line-height: 1.5;
+  height: 100%; /* Centra il testo verticalmente */
+  align-items: center; /* Centra il cuore verticalmente */
 }
