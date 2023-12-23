@@ -2,7 +2,7 @@
   <h1>BoPic</h1>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5 ml-2 mr-2">
   <div class="row">
     <div class=" col-sm-2 d-grid gap-2 mx-auto pb-3">
       <button *ngFor="let cat of categories" type="button" class="btn"
@@ -21,6 +21,13 @@
       <p *ngIf="this.cat == 'A'"> Valore: {{ this.card?.a?.value }} - Parola: {{ this.card?.a?.word }} </p>
       <p *ngIf="this.cat == '?'"> Valore: {{ this.card?.u?.value }} - Parola: {{ this.card?.u?.word }} </p>
       <p *ngIf="this.cat == 'S'"> Valore: {{ this.card?.s?.value }} - Parola: {{ this.card?.s?.word }} </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="progress px-0">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+      </div>
     </div>
   </div>
 </div>
