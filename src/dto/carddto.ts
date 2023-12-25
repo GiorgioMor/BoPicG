@@ -1,7 +1,6 @@
 export class Category {
   constructor(
     public category: string,
-    public color: string,
     public value: number = 0,
     public word?: string
   ) {}
@@ -9,31 +8,31 @@ export class Category {
 
 export class P extends Category {
   constructor(value: number, word: string) {
-    super('P', 'yellow', value, word);
+    super('P', value, word);
   }
 }
 
 export class O extends Category {
   constructor(value: number, word: string) {
-    super('O', 'navy', value, word);
+    super('O', value, word);
   }
 }
 
 export class A extends Category {
   constructor(value: number, word: string) {
-    super('A', 'grey', value, word);
+    super('A', value, word);
   }
 }
 
 export class U extends Category {
   constructor(value: number, word: string) {
-    super('?', 'green', value, word);
+    super('?', value, word);
   }
 }
 
 export class S extends Category {
   constructor(value: number, word: string) {
-    super('S', 'red', value, word);
+    super('S', value, word);
   }
 }
 

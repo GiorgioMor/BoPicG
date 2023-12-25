@@ -1,25 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
-import { interval, map, takeWhile, timer } from 'rxjs';
-import { A, O, P, S, U, Card, Category } from 'src/dto/carddto';
+import { Subscription, interval, map, takeWhile, timer } from 'rxjs';
+import { A, O, P, S, U, Card } from 'src/dto/carddto';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class AppComponent implements OnInit {
 
   curSec: number = 0;
-  color: ThemePalette = 'accent';
+  color: ThemePalette = 'primary';
   mode: ProgressBarMode = 'determinate';
   value = 100;
   bufferValue = 100;
   dice: number | undefined;
 
   timer: number = 70;
+  sub: Subscription | undefined;
+  check: boolean = false;
 
   categories: string[][] = [['P', 'yellow', 'Persone/Luoghi/Animali'], ['O', 'navy', 'Oggetti'], ['A', 'grey', 'Azioni'], ['?', 'green', 'Difficoltà'], ['S', 'red', 'Sfida']];
 
@@ -33,7 +36,7 @@ export class AppComponent implements OnInit {
   "S", "num": 0, "par": "INTIMO"}, {"cat": "P", "num": 0, "par": "ALA"}, {"cat": "O", "num": 0, "par": "FREEZER"}, {"cat": "A", "num": 1, "par": "LAVARE IL CERVELLO"}, {"cat": "?", "num": 1, "par": "FOGLIA DI FICO"}, {"cat": "S", "num": 0, "par": "BIANCO"}, {"cat": "P", "num": 1, "par": "CONSERVATORE"}, {"cat": "O", "num": 0, "par": "CIBO"}, {"cat": "A", "num": 1, "par": "PARTECIPARE"}, {"cat": "?", "num": 0, "par": "CORSA A OSTACOLI"}, {"cat": "S", "num": 
   0, "par": "COSMONAUTA"}, {"cat": "P", "num": 1, "par": "FARAONE"}, {"cat": "O", "num": 0, "par": "TAGLIATELLE"}, {"cat": "A", "num": 1, "par": "RUSSARE"}, {"cat": "?", "num": 0, "par": "VEGLIARE"}, {"cat": "S", "num": 0, "par": "GARA DI SCI"}, {"cat": "P", "num": 1, "par": "ATTORE"}, {"cat": "O", "num": 0, "par": "ARACHIDE"}, {"cat": "A", "num": 0, "par": "ANNEGARE"}, {"cat": "?", "num": 1, "par": "MATTO"}, {"cat": "S", "num": 0, "par": "CAOS"}, {"cat": "P", "num": 1, "par": "MURATORE"}, {"cat": "O", "num": 0, "par": "SEDIA RECLINABILE"}, {"cat": "A", "num": 0, "par": "SECCARE"}, {"cat": "?", "num": 1, "par": "MILIARDO"}, {"cat": "S", "num": 0, "par": "LACCA"}, {"cat": "P", "num": 1, "par": "FORTE ALAMO"}, {"cat": "O", "num": 0, "par": "FRITTATA"}, {"cat": "A", "num": 1, "par": "VESTIRSI"}, {"cat": "?", "num": 0, "par": "STORIA"}, {"cat": "S", "num": 0, "par": "VENERE DI MILO"}, {"cat": "P", "num": 1, "par": "MAIALE"}, {"cat": "O", "num": 0, "par": "PUGNO DI FERRO"}, {"cat": "A", "num": 0, "par": "VINCERE"}, {"cat": "?", "num": 1, "par": "SQUASH"}, {"cat": "S", "num": 0, "par": "MEDICINA"}, {"cat": "P", "num": 1, "par": "ZANNA"}, {"cat": "O", "num": 0, "par": "CALZONI ALLA ZUAVA"}, {"cat": "A", "num": 0, "par": "SUPPORTARE"}, {"cat": "?", "num": 1, "par": "POMODORO"}, {"cat": "S", "num": 0, "par": "CHIARO DI LUNA"}, {"cat": "P", "num": 0, "par": "GALASSIA"}, {"cat": "O", "num": 1, "par": "MATERASSO"}, {"cat": "A", "num": 0, "par": "LUCIDARE"}, {"cat": "?", "num": 1, "par": "NATALE"}, {"cat": "S", "num": 0, "par": "NOTTE"}, {"cat": "P", "num": 1, "par": "SOGLIOLA"}, {"cat": "O", "num": 0, "par": "BICICLETTA"}, {"cat": "A", "num": 0, "par": "FERMENTARE"}, {"cat": "?", "num": 1, "par": "LIMITE DI VELOCITA'"}, {"cat": "S", "num": 0, "par": "PROFONDO"}, {"cat": "P", "num": 1, "par": "AMERICA"}, {"cat": "O", "num": 0, "par": "TAPPETO"}, {"cat": "A", "num": 1, "par": "GENERARE"}, {"cat": "?", "num": 0, "par": "RALLENTATORE"}, {"cat": "S", "num": 0, "par": "MAMMELLATA"}, {"cat": "P", "num": 0, "par": "RIFUGIO ANTIAEREO"}, {"cat": "O", "num": 1, "par": "ELICOTTERO"}, {"cat": "A", "num": 1, "par": "TENTENNARE"}, {"cat": 
   "?", "num": 0, "par": "RABBIA"}, {"cat": "S", "num": 0, "par": "AUTOSTRADA"}, {"cat": "P", "num": 0, "par": "AMERICA DEL NORD"}, {"cat": "O", "num": 0, "par": "PICCHE"}, {"cat": "A", "num": 1, "par": "PROIBIRE"}, {"cat": "?", "num": 1, "par": "NERVO"}, {"cat": "S", "num": 0, "par": "RANNUVOLARSI"}, {"cat": "P", "num": 0, "par": "PALERMO"}, {"cat": "O", "num": 1, "par": "POP CORN"}, {"cat": "A", "num": 0, "par": "POMPARE"}, {"cat": "?", "num": 1, "par": "ATTACCARE BOTTONE"}, {"cat": "S", "num": 0, "par": "TAPPO DI SUGHERO"}, {"cat": "P", "num": 0, "par": "PORTAMAZZE"}, {"cat": "O", "num": 1, "par": "TRAMPOLI"}, {"cat": "A", "num": 0, "par": "CONTARE"}, {"cat": "?", "num": 1, "par": "CAPITALE"}, {"cat": "S", "num": 0, "par": "CAVO ORALE"}, {"cat": "P", "num": 0, "par": "DISCENDENTE"}, {"cat": "O", "num": 1, "par": "CANNA FUMARIA"}, {"cat": "A", "num": 0, "par": "IMBALLARE"}, {"cat": "?", "num": 1, "par": "NUOVO"}, {"cat": "S", "num": 0, "par": "MASCARA"}, {"cat": "P", "num": 1, "par": "CIMITERO"}, {"cat": "O", "num": 0, "par": "JET"}, {"cat": "A", "num": 1, "par": "LAVARSI I CAPELLI"}, {"cat": "?", "num": 0, "par": "PIGRO"}, {"cat": "S", "num": 0, "par": "FANGO"}, {"cat": "P", "num": 0, "par": "STREGONE"}, {"cat": "O", "num": 1, "par": "BOA"}, {"cat": "A", "num": 1, "par": "AVVOLGERE"}, {"cat": "?", "num": 0, "par": "CAPELLI RICCI"}, {"cat": "S", "num": 
-  0, "par": "\nSCRITTURA BRAILLE"}, {"cat": "P", "num": 0, "par": "BLOCK NOTES"}, {"cat": "O", "num": 1, "par": "STRIMPELLARE"}, {"cat": "A", "num": 1, "par": "POLIESTERE"}, {"cat": "?", "num": 0, "par": "SGABELLO DA BAR"}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": "SEMINTERRATO"}, 
+  0, "par": "\nSCRITTURA BRAILLE"}, {"cat": "P", "num": 0, "par": "BLOCK NOTES"}, {"cat": "O", "num": 1, "par": "STRIMPELLARE"}, {"cat": "A", "num": 1, "par": "POLIESTERE"}, {"cat": "?", "num": 0, "par": "SGABELLO DA BAR"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "SEMINTERRATO"}, 
   {"cat": "O", "num": 1, "par": "ALBERO DELLA NAVE"}, {"cat": "A", "num": 1, "par": "INGRANDIRE"}, {"cat": "?", "num": 0, "par": "SCAFFALATURA"}, {"cat": "S", "num": 0, "par": "ORECCHINO"}, {"cat": "P", "num": 0, "par": "POSTINO"}, {"cat": "O", "num": 1, "par": "TROMBONE"}, {"cat": "A", "num": 1, "par": "CUCIRE"}, {"cat": "?", "num": 0, "par": "COSTATA"}, {"cat": "S", "num": 0, "par": "TUFFO DI TESTA"}, {"cat": "P", "num": 0, "par": "TAVOLIERE DELLE PUGLIE"}, 
   {"cat": "O", "num": 1, "par": "COLLARE"}, {"cat": "A", "num": 0, "par": "CORRODERE"}, {"cat": "?", "num": 1, "par": "FORBICINA"}, {"cat": "S", "num": 0, "par": "PETROLIO"}, {"cat": "P", "num": 1, "par": "PETTIROSSO"}, {"cat": "O", "num": 1, "par": "ZAMPIRONE"}, {"cat": "A", "num": 0, "par": "CANDEGGIARE"}, {"cat": "?", "num": 0, "par": "COLON"}, {"cat": "S", "num": 0, "par": "STRISCIA"}, {"cat": "P", "num": 1, "par": "INGRESSO"}, {"cat": "O", "num": 0, "par": "CACCIAVITE"}, {"cat": "A", "num": 0, "par": "PESCARE"}, {"cat": "?", "num": 1, "par": "SONNELLINO"}, {"cat": "S", "num": 0, "par": "VULCANO"}, {"cat": "P", "num": 1, "par": "MUCCA"}, {"cat": "O", "num": 0, "par": "MANUBRIO"}, {"cat": "A", "num": 1, "par": "VENDICARE"}, {"cat": "?", "num": 0, "par": "PNEUMATICO RADIALE"}, {"cat": "S", "num": 0, "par": "LUCE DI CANDELA"}, {"cat": "P", "num": 1, "par": "OSTRICA"}, {"cat": "O", "num": 1, "par": "CAVALLO DA CORSA"}, {"cat": "A", "num": 0, "par": "SCHIZZARE"}, {"cat": "?", "num": 0, "par": "VITA"}, {"cat": "S", "num": 0, "par": "FILTRO PER OBIETTIVO"}, {"cat": 
   "P", "num": 0, "par": "BOYSCOUT"}, {"cat": "O", "num": 1, "par": "MANICHINO"}, {"cat": "A", "num": 0, "par": "DOMARE"}, {"cat": "?", "num": 1, "par": "LUNEDI'"}, {"cat": "S", "num": 0, "par": "SECONDA MANO"}, {"cat": "P", "num": 0, "par": "SAINT TROPEZ"}, {"cat": "O", "num": 1, "par": "PASTICCIO"}, {"cat": "A", "num": 1, "par": "CALCIARE"}, {"cat": "?", "num": 0, "par": "PIEDI PIATTI"}, {"cat": "S", "num": 0, "par": "DESIGNER"}, {"cat": "P", "num": 1, "par": "PALUDE"}, {"cat": "O", "num": 0, "par": "INCROCIO"}, {"cat": "A", "num": 0, "par": "VERIFICARE"}, {"cat": "?", "num": 1, "par": "RIPIANO"}, {"cat": 
@@ -58,7 +61,7 @@ export class AppComponent implements OnInit {
   "P", "num": 0, "par": "GUFO REALE"}, {"cat": "O", "num": 1, "par": "PERISCOPIO"}, {"cat": "A", "num": 1, "par": "VOTARE"}, {"cat": "?", "num": 0, "par": 
   "INDICAZIONE"}, {"cat": "S", "num": 0, "par": "PORCOSPINO"}, {"cat": "P", "num": 1, "par": "CLAUDIO BAGLIONI"}, {"cat": "O", "num": 0, "par": "PASTINA"}, {"cat": "A", "num": 1, "par": "IMBRATTARE"}, {"cat": "?", "num": 0, "par": "FOCHERELLO"}, {"cat": "S", "num": 0, "par": "NORDEST"}, {"cat": "P", "num": 
   1, "par": "GERUSALEMME"}, {"cat": "O", "num": 1, "par": "METEORA"}, {"cat": "A", "num": 0, "par": "RALLEGRARE"}, {"cat": "?", "num": 0, "par": "SQUADRA"}, {"cat": "S", "num": 0, "par": "CINTURA NERA"}, {"cat": "P", "num": 1, "par": "CAVALIERE"}, {"cat": "O", "num": 1, "par": "URNA"}, {"cat": "A", "num": 0, "par": "FORGIARE"}, {"cat": "?", "num": 0, "par": "LATERALMENTE"}, {"cat": "S", "num": 0, "par": "CORSA DI SLITTE"}, {"cat": "P", "num": 1, "par": "CATTEDRALE"}, {"cat": "O", "num": 0, "par": "CORAZZA"}, {"cat": "A", "num": 0, "par": "DEDICARE"}, {"cat": "?", "num": 1, "par": "TONNELLATA"}, {"cat": "S", "num": 0, "par": "OVALE"}, {"cat": "P", "num": 0, "par": "CILE"}, {"cat": "O", "num": 1, "par": "BAMBOLA"}, {"cat": "A", "num": 0, "par": "SPANDERE"}, {"cat": "?", "num": 1, "par": "PALCOSCENICO"}, {"cat": "S", "num": 0, "par": "CANZONE"}, {"cat": "P", "num": 0, "par": "GIUSEPPE GARIBALDI"}, {"cat": "O", "num": 1, "par": "TUTU'"}, {"cat": "A", "num": 1, "par": "CHIUDERE A CHIAVE"}, {"cat": "?", "num": 0, "par": "SALSA"}, {"cat": "S", "num": 0, "par": 
-  "GIRADISCHI"}, {"cat": "P", "num": 1, "par": "BALENA"}, {"cat": "O", "num": 1, "par": "CINTURA"}, {"cat": "A", "num": 0, "par": "APPASSIRE"}, {"cat": "?", "num": 0, "par": "PRANZO"}, {"cat": "S", "num": 0, "par": "TERMOMETRO"}, {"cat": "P", "num": 1, "par": "SCUOLA"}, {"cat": "O", "num": 0, "par": "FORNO"}, {"cat": "A", "num": 1, "par": "SLOGARSI"}, {"cat": "?", "num": 0, "par": "COMMOZIONCEREBRALE"}, {"cat": "S", "num": 0, "par": "FANTASMA"}, {"cat": "P", "num": 1, "par": "CASSIUS CLAY"}, {"cat": "O", "num": 1, "par": "ELMO"}, {"cat": "A", "num": 1, "par": "STREGARE"}, {"cat": "?", "num": 0, "par": "\u03a4\u039f\u039d\u039f"}, {"cat": "S", "num": 0, "par": "VIRGOLETTE"}, {"cat": "P", "num": 0, "par": "VILLAGGIO"}, {"cat": "O", "num": 1, "par": "FERITOIA"}, {"cat": "A", "num": 1, "par": "GIRARE UN FILM"}, {"cat": "?", "num": 0, "par": "ACQUA BOLLENTE"}, {"cat": "S", "num": 0, "par": "PULCE"}, {"cat": "P", "num": 0, "par": "MOLARE"}, {"cat": "O", "num": 1, "par": "SVEGLIA"}, {"cat": "A", "num": 1, "par": "VERSARE"}, {"cat": "?", "num": 0, "par": "POLPETTA"}, {"cat": "S", "num": 0, "par": "BICCHIERE DI VINO"}, {"cat": "P", "num": 0, "par": "TOPO"}, {"cat": "O", "num": 0, "par": "BIGLIETTO"}, {"cat": "A", "num": 1, "par": "ERUTTARE"}, {"cat": "?", "num": 1, "par": "PRIMA GUERRA MONDIALE"}, {"cat": "S", "num": 0, "par": "VISIERA"}, {"cat": "P", "num": 0, "par": "AMAZZONE"}, {"cat": "O", "num": 0, "par": "SCIARPA"}, {"cat": "A", "num": 1, "par": "AVVELENARE"}, {"cat": "?", "num": 1, "par": "PAROLA"}, {"cat": "S", "num": 0, "par": "PARCHIMETRO"}, {"cat": "P", "num": 0, "par": "TORRE"}, {"cat": "O", "num": 0, "par": "PALLINA DA CRICKET"}, {"cat": "A", "num": 1, "par": "CHIEDERE"}, {"cat": "?", "num": 1, "par": "VENTOSO"}, {"cat": "S", "num": 0, "par": "TITANIC"}, {"cat": "P", "num": 1, "par": "SATURNO"}, {"cat": "O", "num": 0, "par": "SALTINMENTE"}, {"cat": "A", "num": 0, "par": "PRENDERE"}, {"cat": "?", "num": 1, "par": "TITAP"}, {"cat": "S", "num": 0, "par": "CORROSIONE"}, {"cat": "P", "num": 1, "par": "UNIVERSITA'"}, {"cat": "O", "num": 0, "par": "COLLANA"}, {"cat": "A", "num": 1, "par": "COGLIERE"}, {"cat": "?", "num": 
+  "GIRADISCHI"}, {"cat": "P", "num": 1, "par": "BALENA"}, {"cat": "O", "num": 1, "par": "CINTURA"}, {"cat": "A", "num": 0, "par": "APPASSIRE"}, {"cat": "?", "num": 0, "par": "PRANZO"}, {"cat": "S", "num": 0, "par": "TERMOMETRO"}, {"cat": "P", "num": 1, "par": "SCUOLA"}, {"cat": "O", "num": 0, "par": "FORNO"}, {"cat": "A", "num": 1, "par": "SLOGARSI"}, {"cat": "?", "num": 0, "par": "COMMOZIONE CEREBRALE"}, {"cat": "S", "num": 0, "par": "FANTASMA"}, {"cat": "P", "num": 1, "par": "CASSIUS CLAY"}, {"cat": "O", "num": 1, "par": "ELMO"}, {"cat": "A", "num": 1, "par": "STREGARE"}, {"cat": "?", "num": 0, "par": "\u03a4\u039f\u039d\u039f"}, {"cat": "S", "num": 0, "par": "VIRGOLETTE"}, {"cat": "P", "num": 0, "par": "VILLAGGIO"}, {"cat": "O", "num": 1, "par": "FERITOIA"}, {"cat": "A", "num": 1, "par": "GIRARE UN FILM"}, {"cat": "?", "num": 0, "par": "ACQUA BOLLENTE"}, {"cat": "S", "num": 0, "par": "PULCE"}, {"cat": "P", "num": 0, "par": "MOLARE"}, {"cat": "O", "num": 1, "par": "SVEGLIA"}, {"cat": "A", "num": 1, "par": "VERSARE"}, {"cat": "?", "num": 0, "par": "POLPETTA"}, {"cat": "S", "num": 0, "par": "BICCHIERE DI VINO"}, {"cat": "P", "num": 0, "par": "TOPO"}, {"cat": "O", "num": 0, "par": "BIGLIETTO"}, {"cat": "A", "num": 1, "par": "ERUTTARE"}, {"cat": "?", "num": 1, "par": "PRIMA GUERRA MONDIALE"}, {"cat": "S", "num": 0, "par": "VISIERA"}, {"cat": "P", "num": 0, "par": "AMAZZONE"}, {"cat": "O", "num": 0, "par": "SCIARPA"}, {"cat": "A", "num": 1, "par": "AVVELENARE"}, {"cat": "?", "num": 1, "par": "PAROLA"}, {"cat": "S", "num": 0, "par": "PARCHIMETRO"}, {"cat": "P", "num": 0, "par": "TORRE"}, {"cat": "O", "num": 0, "par": "PALLINA DA CRICKET"}, {"cat": "A", "num": 1, "par": "CHIEDERE"}, {"cat": "?", "num": 1, "par": "VENTOSO"}, {"cat": "S", "num": 0, "par": "TITANIC"}, {"cat": "P", "num": 1, "par": "SATURNO"}, {"cat": "O", "num": 0, "par": "SALTINMENTE"}, {"cat": "A", "num": 0, "par": "PRENDERE"}, {"cat": "?", "num": 1, "par": "TITAP"}, {"cat": "S", "num": 0, "par": "CORROSIONE"}, {"cat": "P", "num": 1, "par": "UNIVERSITA'"}, {"cat": "O", "num": 0, "par": "COLLANA"}, {"cat": "A", "num": 1, "par": "COGLIERE"}, {"cat": "?", "num": 
   0, "par": "ZOPPO"}, {"cat": "S", "num": 0, "par": "NUVOLA"}, {"cat": "P", "num": 1, "par": "AL PACINO"}, {"cat": "O", "num": 1, "par": "RAGGI X"}, {"cat": "A", "num": 0, "par": "DIVORZIARE"}, {"cat": "?", "num": 0, "par": "CHIOSCO"}, {"cat": "S", "num": 0, "par": "NASTRO ADESIVO"}, {"cat": "P", "num": 
   1, "par": "SUD"}, {"cat": "O", "num": 0, "par": "FRIGORIFERO"}, {"cat": "A", "num": 0, "par": "GRACCHIARE"}, {"cat": "?", "num": 1, "par": "BUNKER"}, {"cat": "S", "num": 0, "par": "IDROREPELLENTE"}, {"cat": "P", "num": 1, "par": "ORFANO"}, {"cat": "O", "num": 0, "par": "PRESERVATIVO"}, {"cat": "A", "num": 1, "par": "DECAPITARE"}, {"cat": "?", "num": 0, "par": "VENERDI'"}, {"cat": "S", "num": 0, "par": "PONTE LEVATOIO"}, {"cat": "P", "num": 1, "par": "RIVIERA"}, {"cat": "O", "num": 0, "par": "RULLO TRASPORTATORE"}, {"cat": "A", "num": 1, "par": "SURGELARE"}, {"cat": "?", "num": 0, "par": "CONVERSAZIONE"}, 
   {"cat": "S", "num": 0, "par": "RECINTO"}, {"cat": "P", "num": 0, "par": "FORESTA NERA"}, {"cat": "O", "num": 1, "par": "VETRO"}, {"cat": "A", "num": 1, "par": "RICORDARE"}, {"cat": "?", "num": 0, "par": "GIOIELLO"}, {"cat": "S", "num": 0, "par": "RAGGIO"}, {"cat": "P", "num": 0, "par": "RONALD REAGAN"}, {"cat": "O", "num": 1, "par": "CANDELABRO"}, {"cat": "A", "num": 1, "par": "INVENTARE"}, {"cat": "?", "num": 0, "par": "BRIOCHE"}, {"cat": "S", "num": 0, "par": "MARTE"}, {"cat": "P", "num": 0, "par": "TIGRE"}, {"cat": "O", "num": 1, "par": "TRECCIA"}, {"cat": "A", "num": 1, "par": "DUELLARE"}, {"cat": "?", "num": 0, "par": "PASSEPARTOUT"}, {"cat": "S", "num": 0, "par": "SCARPONI"}, {"cat": "P", "num": 0, "par": "ITALIA"}, {"cat": "O", "num": 1, "par": 
@@ -75,9 +78,9 @@ export class AppComponent implements OnInit {
   1, "par": "RASCHIARE"}, {"cat": "?", "num": 0, "par": "DISPENSA"}, {"cat": "S", "num": 0, "par": "ORSA MAGGIORE"}, {"cat": "P", "num": 1, "par": "VELODROMO"}, {"cat": "O", "num": 0, "par": "BRACCIALETTO"}, {"cat": "A", "num": 1, "par": "INCHINARSI"}, {"cat": "?", "num": 0, "par": "PING PONG"}, {"cat": "S", "num": 0, "par": "MURO"}, {"cat": "P", "num": 0, "par": "CAMMELLO"}, {"cat": "O", "num": 0, "par": "LANCIA"}, {"cat": "A", "num": 1, "par": "SCARROZZARE"}, {"cat": "?", "num": 1, "par": "SALA OPERATORIA"}, {"cat": "S", "num": 0, "par": "SINA"}, {"cat": "P", "num": 1, "par": "CASTORO"}, {"cat": "O", "num": 0, "par": "CANDELA"}, {"cat": "A", "num": 1, "par": "CAPOVOLGERSI"}, {"cat": "?", "num": 1, "par": "BECCHIME"}, {"cat": "S", "num": 0, "par": "FORFORA"}, {"cat": "P", "num": 0, "par": "IPPOPOTAMO"}, {"cat": "O", "num": 1, "par": "FOSSILE"}, {"cat": "A", "num": 0, "par": "AFFIBBIARE"}, {"cat": "?", "num": 1, "par": "PORTARE AVANTI"}, {"cat": "S", "num": 0, "par": "RIPIDO"}, {"cat": "P", "num": 1, "par": "INCISIVO"}, {"cat": "O", "num": 0, "par": "MONOPOLI"}, {"cat": "A", "num": 1, "par": "DIMENTICARE"}, {"cat": "?", "num": 0, "par": "BOTTIGLIA DI BIRRA"}, {"cat": "S", "num": 0, "par": "TEMPESTA DI NEVE"}, {"cat": "P", "num": 0, "par": "PELLICANO"}, {"cat": "O", "num": 0, "par": "POMPON"}, {"cat": "A", "num": 1, "par": "DOPPIARE"}, {"cat": "?", "num": 1, "par": "MAGRO"}, {"cat": "S", "num": 0, "par": "TANGA"}, {"cat": "P", "num": 0, "par": "ALPI"}, {"cat": "O", "num": 1, "par": "CITOFONO"}, {"cat": "A", 
   "num": 0, "par": "PRENDERE IL SOLE"}, {"cat": "?", "num": 1, "par": "TU"}, {"cat": "S", "num": 0, "par": "BASSO"}, {"cat": "P", "num": 0, "par": "PIEMONTE"}, {"cat": "O", "num": 0, "par": "BISCOTTO"}, {"cat": "A", "num": 1, "par": "STRANGOLARE"}, {"cat": "?", "num": 1, "par": "SCATOLA DI FIAMMIFERI"}, {"cat": "S", "num": 0, "par": "CUGINO"}, {"cat": "P", "num": 0, "par": "CAPPELLA SISTINA"}, {"cat": "O", "num": 1, "par": "SIGARETTA"}, {"cat": "A", "num": 0, "par": "FRUSTARE"}, {"cat": "?", "num": 1, "par": "INVISIBILE"}, {"cat": "S", "num": 0, "par": "GEYSER"}, {"cat": "P", "num": 1, "par": "GATTO"}, {"cat": "O", 
   "num": 0, "par": "MONETA DA 10 LIRE"}, {"cat": "A", "num": 1, "par": "BOCCIARE"}, {"cat": "?", "num": 0, "par": "INFELICE"}, {"cat": "S", "num": 0, "par": "NAVICELLA SPAZIALE"}, {"cat": "P", "num": 0, "par": "ZEBRA"}, {"cat": "O", "num": 1, "par": "FAGIOLO"}, {"cat": "A", "num": 1, "par": "SPENDERE"}, {"cat": "?", "num": 0, "par": "SIMMETRICO"}, {"cat": "S", "num": 0, "par": "MURO DEL SUONO"}, {"cat": "P", "num": 1, "par": "PEARL HARBOUR"}, {"cat": "O", "num": 0, 
-  "par": "ARMADIETTO"}, {"cat": "A", "num": 1, "par": "CATAPULTARE"}, {"cat": "?", "num": 0, "par": "PUNCH"}, {"cat": "S", "num": 0, "par": "HALLOWEEN"}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": "MOTEL"}, {"cat": "O", "num": 1, "par": "BURATTINO"}, {"cat": "A", "num": 1, "par": "TIRARE"}, {"cat": "?", "num": 0, "par": "PASTICCERIA"}, {"cat": "S", "num": 0, "par": "SUPERFICIE ESTERNA"}, {"cat": "P", "num": 0, "par": "PONY"}, {"cat": "O", "num": 1, "par": "SCARPA"}, {"cat": "A", "num": 0, "par": "SUGGERIRE"}, 
-  {"cat": "?", "num": 1, "par": "SBANDAMENTO"}, {"cat": "S", "num": 0, "par": "ARIA"}, {"cat": "P", "num": 0, "par": "CINTOLA"}, {"cat": "O", "num": 1, "par": "PRESEPIO"}, {"cat": "A", "num": 1, "par": "SOFFOCARE"}, {"cat": "?", "num": 0, "par": "SECONDO PIANO"}, {"cat": "S", "num": 0, "par": "GATTO DELLE NEVI"}, {"cat": "P", "num": 0, "par": "BIBLIOTECA"}, {"cat": "O", "num": 1, "par": "FUOCHI D'ARTIFICIO"}, {"cat": "A", "num": 0, "par": "FOTOGRAFARE"}, {"cat": "?", "num": 1, "par": "MANISCALCO"}, {"cat": "S", "num": 0, "par": "AGOSTO"}, {"cat": "P", "num": 1, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 1, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}, 
-  {"cat": "P", "num": 0, "par": 0}, {"cat": "O", "num": 0, "par": 0}, {"cat": "A", "num": 0, "par": 0}, {"cat": "?", "num": 0, "par": 0}, {"cat": "S", "num": 0, "par": 0}]
+  "par": "ARMADIETTO"}, {"cat": "A", "num": 1, "par": "CATAPULTARE"}, {"cat": "?", "num": 0, "par": "PUNCH"}, {"cat": "S", "num": 0, "par": "HALLOWEEN"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "MOTEL"}, {"cat": "O", "num": 1, "par": "BURATTINO"}, {"cat": "A", "num": 1, "par": "TIRARE"}, {"cat": "?", "num": 0, "par": "PASTICCERIA"}, {"cat": "S", "num": 0, "par": "SUPERFICIE ESTERNA"}, {"cat": "P", "num": 0, "par": "PONY"}, {"cat": "O", "num": 1, "par": "SCARPA"}, {"cat": "A", "num": 0, "par": "SUGGERIRE"}, 
+  {"cat": "?", "num": 1, "par": "SBANDAMENTO"}, {"cat": "S", "num": 0, "par": "ARIA"}, {"cat": "P", "num": 0, "par": "CINTOLA"}, {"cat": "O", "num": 1, "par": "PRESEPIO"}, {"cat": "A", "num": 1, "par": "SOFFOCARE"}, {"cat": "?", "num": 0, "par": "SECONDO PIANO"}, {"cat": "S", "num": 0, "par": "GATTO DELLE NEVI"}, {"cat": "P", "num": 0, "par": "BIBLIOTECA"}, {"cat": "O", "num": 1, "par": "FUOCHI D'ARTIFICIO"}, {"cat": "A", "num": 0, "par": "FOTOGRAFARE"}, {"cat": "?", "num": 1, "par": "MANISCALCO"}, {"cat": "S", "num": 0, "par": "AGOSTO"}, {"cat": "P", "num": 1, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 1, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}, 
+  {"cat": "P", "num": 0, "par": "NULL"}, {"cat": "O", "num": 0, "par": "NULL"}, {"cat": "A", "num": 0, "par": "NULL"}, {"cat": "?", "num": 0, "par": "NULL"}, {"cat": "S", "num": 0, "par": "NULL"}]
 
   cardList: Map<number, Card> = new Map();
   cards: Card[] = [];
@@ -108,43 +111,54 @@ export class AppComponent implements OnInit {
     this.cat = cat;
     this.card = this.cardList.get(rndInt);
 
+    this.value = 100;
+    this.curSec = 0;
+    if(this.check) {
+      this.sub!.unsubscribe();
+    }
+
     switch(cat) {
       case 'P':
-        if(this.card?.p?.value)
+        if(!this.card?.p?.value)
           this.startTimer();
         break;
       case 'O':
-        if(this.card?.o?.value)
+        if(!this.card?.o?.value)
           this.startTimer();
         break;
       case 'A':
-        if(this.card?.a?.value)
+        if(!this.card?.a?.value)
           this.startTimer();
         break;
       case '?':
-        if(this.card?.u?.value)
+        if(!this.card?.u?.value)
           this.startTimer();
         break;
     }
   }
 
   startTimer() {
-    this.value = 100;
-
     const time = this.timer;
     const timer$ = interval(1000);
 
-    const sub = timer$.subscribe((sec) => {
+    this.sub = timer$.subscribe((sec) => {
+      this.check = true;
       this.value = 100 - sec * 100 / time;
       this.curSec = sec;
 
       if (this.curSec === time) {
-        sub.unsubscribe();
+        this.sub!.unsubscribe();
+        this.check = false;
       }
     });
   }
 
   rollDice() {
+    this.value = 100;
+    this.curSec = 0;
+    if(this.check) {
+      this.sub!.unsubscribe();
+    }
     this.dice = this.randomIntFromInterval(1, 6);
   }
 
