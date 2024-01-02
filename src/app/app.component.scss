@@ -19,3 +19,89 @@
   height: 100%; /* Centra il testo verticalmente */
   align-items: center; /* Centra il cuore verticalmente */
 }
+
+.blur {
+  color: transparent;
+  text-shadow: 0 0 13px #000;
+}
+
+/* Aggiungi queste regole nel tuo stile CSS */
+.eye-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.eye-button:hover {
+  color: #3498db; /* Cambia colore all'hover */
+}
+
+/* Stile aggiuntivo per l'icona dell'occhio */
+.fas.fa-eye,
+.fas.fa-eye-slash {
+  transition: transform 0.3s ease-in-out;
+}
+
+.fas.fa-eye-slash {
+  transform: scale(0.8); /* Rimpicciolisci l'occhio sbarrato */
+}
+
+.t-red {
+  color: red;
+}
+
+
+.mybutton {
+  background: #2B2D2F;
+  height: 80px;
+  width: 200px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.mytext {
+  font: bold 1.25rem/1 poppins;
+  color: #71DFBE;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-52%);
+  left: 0;
+  right: 0;
+}
+
+.myprogress-bar {
+  position: absolute;
+  height: 10px;
+  width: 0;
+  right: 0;
+  top: 50%;
+  left: 50%;
+  border-radius: 200px;
+  transform: translateY(-50%) translateX(-50%);
+  background: lighten(#2B2D2F, 15%);
+}
+
+svg {
+  width: 30px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  left: 50%;
+  right: 0;
+}
+
+.mycheck {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

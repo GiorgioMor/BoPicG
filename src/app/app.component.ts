@@ -3,6 +3,9 @@ import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 import { Subscription, interval, map, takeWhile, timer } from 'rxjs';
 import { A, O, P, S, U, Card } from 'src/dto/carddto';
+import { MatSnackBar } from '@angular/material/snack-bar';
+// Import the necessary modules
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +14,17 @@ import { A, O, P, S, U, Card } from 'src/dto/carddto';
   encapsulation: ViewEncapsulation.None,
 })
 
+
 export class AppComponent implements OnInit {
+
+  constructor(private snackBar: MatSnackBar) { }
+
+  showSnackbar() {
+    this.snackBar.open('Sfida! Giocano tutti, niente tempo... Let\'s go!', 'Chiudi', {
+      duration: 3000, // Durata in millisecondi
+      panelClass: ['custom-snackbar'] // Aggiungi una classe personalizzata per stili aggiuntivi
+    });
+  }
 
   curSec: number = 0;
   color: ThemePalette = 'primary';
@@ -20,9 +33,10 @@ export class AppComponent implements OnInit {
   bufferValue = 100;
   dice: number | undefined;
 
-  timer: number = 70;
+  timer: number = 65;
   sub: Subscription | undefined;
   check: boolean = false;
+  blur: boolean = false;
 
   categories: string[][] = [['P', 'yellow', 'Persone/Luoghi/Animali'], ['O', 'navy', 'Oggetti'], ['A', 'grey', 'Azioni'], ['?', 'green', 'Difficoltà'], ['S', 'red', 'Sfida']];
 
@@ -113,6 +127,7 @@ export class AppComponent implements OnInit {
 
     this.value = 100;
     this.curSec = 0;
+    this.blur = false;
     if(this.check) {
       this.sub!.unsubscribe();
     }
@@ -121,18 +136,29 @@ export class AppComponent implements OnInit {
       case 'P':
         if(!this.card?.p?.value)
           this.startTimer();
+        else
+          this.showSnackbar();
         break;
       case 'O':
         if(!this.card?.o?.value)
           this.startTimer();
+        else
+          this.showSnackbar();
         break;
       case 'A':
         if(!this.card?.a?.value)
           this.startTimer();
+        else
+          this.showSnackbar();
         break;
       case '?':
         if(!this.card?.u?.value)
           this.startTimer();
+        else
+          this.showSnackbar();
+        break;
+      case 'S':
+        this.showSnackbar();
         break;
     }
   }
@@ -147,8 +173,14 @@ export class AppComponent implements OnInit {
       this.curSec = sec;
 
       if (this.curSec === time) {
+        let audio = new Audio();
+        audio.src = "../assets/sad_trombone.wav";
+        audio.load();
+
         this.sub!.unsubscribe();
         this.check = false;
+        audio.play();
+        this.blur = false;
       }
     });
   }
@@ -156,6 +188,7 @@ export class AppComponent implements OnInit {
   rollDice() {
     this.value = 100;
     this.curSec = 0;
+    this.blur = false;
     if(this.check) {
       this.sub!.unsubscribe();
     }
@@ -165,4 +198,10 @@ export class AppComponent implements OnInit {
   setCat(cat: string) {
     this.catShow = cat;
   }
+
+  toggleBlur() {
+    this.blur = !this.blur;
+  }
+
+
 }

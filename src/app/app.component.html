@@ -18,11 +18,27 @@
     </div>
     <div class="col-sm-8">
       <h2>Categoria selezionata: {{ this.catShow }}</h2>
-      <p class="fs-2" *ngIf="this.cat == 'P'"> Sfida: {{ this.card?.p?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.p?.word }} </p>
-      <p class="fs-2" *ngIf="this.cat == 'O'"> Sfida: {{ this.card?.o?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.o?.word }} </p>
-      <p class="fs-2" *ngIf="this.cat == 'A'"> Sfida: {{ this.card?.a?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.a?.word }} </p>
-      <p class="fs-2" *ngIf="this.cat == '?'"> Sfida: {{ this.card?.u?.value == 0 ? 'No' : 'Si' }} <br> Parola: {{ this.card?.u?.word }} </p>
-      <p class="fs-2" *ngIf="this.cat == 'S'"> Sfida: Si <br> Parola: {{ this.card?.s?.word }} </p>
+      <p class="fs-2" *ngIf="this.cat == 'P'"> Sfida: <span [class.t-red]="this.card?.p?.value">{{ this.card?.p?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.p?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
+        <i *ngIf="!blur" class="fas fa-eye"></i>
+        <i *ngIf="blur" class="fas fa-eye-slash"></i>
+      </button></p>
+      <p class="fs-2" *ngIf="this.cat == 'O'"> Sfida: <span [class.t-red]="this.card?.o?.value">{{ this.card?.o?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.o?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
+        <i *ngIf="!blur" class="fas fa-eye"></i>
+        <i *ngIf="blur" class="fas fa-eye-slash"></i>
+      </button></p>
+      <p class="fs-2" *ngIf="this.cat == 'A'"> Sfida: <span [class.t-red]="this.card?.a?.value">{{ this.card?.a?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.a?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
+        <i *ngIf="!blur" class="fas fa-eye"></i>
+        <i *ngIf="blur" class="fas fa-eye-slash"></i>
+      </button></p>
+      <p class="fs-2" *ngIf="cat == '?'"> Sfida: <span [class.t-red]="this.card?.u?.value">{{ this.card?.u?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.u?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
+        <i *ngIf="!blur" class="fas fa-eye"></i>
+        <i *ngIf="blur" class="fas fa-eye-slash"></i>
+      </button></p>
+      <p class="fs-2" *ngIf="this.cat == 'S'"> Sfida: <span class="t-red">Si</span> <br> Parola: <span [class.blur]="blur">{{ this.card?.s?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
+        <i *ngIf="!blur" class="fas fa-eye"></i>
+        <i *ngIf="blur" class="fas fa-eye-slash"></i>
+      </button></p>
+
     </div>
   </div>
   <div class="row">
@@ -36,7 +52,6 @@
     </div>
   </div>
 </div>
-
 <div class="footer">
   <p>Fatto dal Moroder con amore</p>
 </div>
