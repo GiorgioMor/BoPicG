@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
   bufferValue = 100;
   dice: number | undefined;
 
-  timer: number = 5;
+  timer: number = 65;
   sub: Subscription | undefined;
   check: boolean = false;
   blur: boolean = false;
@@ -248,6 +248,4 @@ export class AppComponent implements OnInit {
   toggleBlur() {
     this.blur = !this.blur;
   }
-
-
 }
