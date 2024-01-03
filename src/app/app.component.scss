@@ -1,3 +1,6 @@
+.wrapper {
+  margin-bottom: 50px;
+}
 .footer {
   background-color: #333;
   color: #fff;
@@ -6,6 +9,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  flex-shrink: 0;
 }
 .footer p::after {
   content: '\2764'; /* Codice Unicode per il carattere del cuore */
@@ -51,57 +55,96 @@
   color: red;
 }
 
+.dice {
+  width: 50px;
+  height: 50px;
+  transform-style: preserve-3d;
+  transition: transform 1s; }
 
-.mybutton {
-  background: #2B2D2F;
-  height: 80px;
-  width: 200px;
-  text-align: center;
+.dot {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.mytext {
-  font: bold 1.25rem/1 poppins;
-  color: #71DFBE;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-52%);
-  left: 0;
-  right: 0;
-}
-
-.myprogress-bar {
-  position: absolute;
+  width: 10px;
   height: 10px;
-  width: 0;
-  right: 0;
-  top: 50%;
-  left: 50%;
-  border-radius: 200px;
-  transform: translateY(-50%) translateX(-50%);
-  background: lighten(#2B2D2F, 15%);
-}
+  margin: -5px 2.5px 2.5px -5px;
+  border-radius: 10px;
+  background-color: #3498db;
+  box-shadow: inset 2px 2px #3498db;}
 
-svg {
-  width: 30px;
+.dice-one {
+  left: 225px; }
+
+.side {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  left: 50%;
-  right: 0;
+  background-color: #ffF;
+  border-radius:5px;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #e5e5e5;
+  text-align: center;
+  line-height: 2em;
 }
 
-.mycheck {
-  fill: none;
-  stroke: #FFFFFF;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.side:nth-child(1) {
+  transform: translateZ(1.5em); }
+
+.side:nth-child(6) {
+  transform: rotateY(90deg) translateZ(1.5em); }
+
+.side:nth-child(3) {
+  transform: rotateY(-90deg) translateZ(1.5em); }
+
+.side:nth-child(4) {
+  transform: rotateX(90deg) translateZ(1.5em); }
+
+.side:nth-child(5) {
+  transform: rotateX(-90deg) translateZ(1.5em); }
+
+.side:nth-child(2) {
+  transform: rotateY(-180deg) translateZ(1.5em); }
+
+.two-1, .three-1, .four-1, .five-1, .six-1 {
+  top: 20%;
+  left: 20%; }
+
+.four-3, .five-3, .six-4 {
+  top: 20%;
+  left: 80%; }
+
+.one-1, .three-2, .five-5 {
+  top: 50%;
+  left: 50%; }
+
+.four-2, .five-2, .six-3 {
+  top: 80%;
+  left: 20%; }
+
+.two-2, .three-3, .four-4, .five-4, .six-6 {
+  top: 80%;
+  left: 80%; }
+
+.six-2 {
+  top: 50%;
+  left: 20%; }
+
+.six-5 {
+  top: 50%;
+  left: 80%; 
 }
+
+.show-1 {
+  transform: rotateX(720deg) rotateZ(-720deg); }
+
+.show-2 {
+  transform: rotateX(-900deg) rotateZ(1080deg); }
+
+.show-3 {
+  transform: rotateY(810deg) rotateZ(720deg); }
+
+.show-4 {
+  transform: rotateX(-450deg) rotateZ(-1440deg); }
+
+.show-5 {
+  transform: rotateX(450deg) rotateZ(-720deg); }
+
+.show-6 {
+  transform: rotateY(-450deg) rotateZ(-1440deg); }

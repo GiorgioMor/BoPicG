@@ -3,20 +3,17 @@
 /* styles.css o styles.scss */
 @import '~@fortawesome/fontawesome-free/css/all.css';
 
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
 
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
     display: flex;
     flex-direction: column;
 }
-
-/* Stile per il contenuto principale */
-/* Aggiungi il margine inferiore del footer in base all'altezza del footer */
-main {
-    flex: 1;
-    margin-bottom: 50px; /* Altezza del footer */
+html, body {
+    height: 100%;
 }
-
-

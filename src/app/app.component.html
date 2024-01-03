@@ -1,57 +1,92 @@
-<div class="p-1 bg-primary text-white text-center">
-  <h1 class="m-0">BoPic</h1>
-</div>
+<div class="wrapper">
+  <div class="p-1 bg-primary text-white text-center">
+    <h1 class="m-0">BoPic</h1>
+  </div>
 
-<div class="container mt-3 ml-2 mr-2">
-  <div class="row">
-    <div class=" col-sm-2 d-grid gap-2 mx-auto pb-3">
-      <button *ngFor="let cat of categories" type="button" class="btn"
-        [class.btn-warning]="cat[1] == 'yellow'"
-        [class.btn-dark]="cat[1] == 'navy'"
-        [class.btn-secondary]="cat[1] == 'grey'"
-        [class.btn-success]="cat[1] == 'green'"
-        [class.btn-danger]="cat[1] == 'red'"
-        (click)="setCat(cat[2]); drawCard(cat[0])">{{ cat[0] }}
-      </button>
-      <hr>
-      <button type="button" class="btn btn-outline-primary" (click)="rollDice()">Indovinato -> {{ this.dice }}</button>
+  <audio id="timeout" class="d-none">
+    <source type="audio/mpeg" src="../assets/sad_trombone.wav">
+  </audio>
+
+  <audio id="challenge" class="d-none">
+    <source type="audio/mpeg" src="../assets/alert.mp3">
+  </audio>
+
+  <p-toast position="top-center" key="tc" [breakpoints]="{'920px': {width: '85%'}}" [showTransformOptions]="'translateY(100%)'"  [showTransformOptions]="'translateX(100%)'" [showTransitionOptions]="'200ms'" [hideTransitionOptions]="'500ms'"></p-toast>
+
+  <div class="container mt-3 mb-3 ml-2 mr-2">
+    <div class="row">
+      <div class=" col-sm-2 d-grid gap-2 mx-auto pb-3">
+        <button *ngFor="let cat of categories" type="button" class="btn"
+          [class.btn-warning]="cat[1] == 'yellow'"
+          [class.btn-dark]="cat[1] == 'navy'"
+          [class.btn-secondary]="cat[1] == 'grey'"
+          [class.btn-success]="cat[1] == 'green'"
+          [class.btn-danger]="cat[1] == 'red'"
+          (click)="setCat(cat[2]); drawCard(cat[0])">{{ cat[0] }}
+        </button>
+        <hr>
+        <button type="button" class="btn btn-outline-primary" [@squeezeExpand]="buttonState" (click)="rollDice()">Indovinato!</button>
+      </div>
+      <div class="col-sm-8">
+        <h2 class="my-0">Categoria selezionata: {{ this.catShow }}</h2>
+        <p class="fs-2 my-1">
+          Sfida: <span [class.t-red]="this.cardToShow.value === 'SI'">{{ this.cardToShow.value }}</span>
+          <br>
+          Parola: <span [class.blur]="blur">{{ this.cardToShow.word }}</span>
+          <button *ngIf="this.cardToShow.word != null" class="btn btn-sm eye-button" (click)="toggleBlur()">
+            <i *ngIf="!blur" class="fas fa-eye"></i>
+            <i *ngIf="blur" class="fas fa-eye-slash"></i>
+          </button>
+        </p>
+        <div id='dice' class="dice dice-one m-2">
+              <div id="dice-one-side-one" class='side one'>
+                <div class="dot one-1"></div>
+              </div>
+              <div id="dice-one-side-two" class='side two'>
+                <div class="dot two-1"></div>
+                <div class="dot two-2"></div>
+              </div>
+              <div id="dice-one-side-three" class='side three'>
+                <div class="dot three-1"></div>
+                <div class="dot three-2"></div>
+                <div class="dot three-3"></div>
+              </div>
+              <div id="dice-one-side-four" class='side four'>
+                <div class="dot four-1"></div>
+                <div class="dot four-2"></div>
+                <div class="dot four-3"></div>
+                <div class="dot four-4"></div>
+              </div>
+              <div id="dice-one-side-five" class='side five'>
+                <div class="dot five-1"></div>
+                <div class="dot five-2"></div>
+                <div class="dot five-3"></div>
+                <div class="dot five-4"></div>
+                <div class="dot five-5"></div>
+              </div>
+              <div id="dice-one-side-six" class='side six'>
+                <div class="dot six-1"></div>
+                <div class="dot six-2"></div>
+                <div class="dot six-3"></div>
+                <div class="dot six-4"></div>
+                <div class="dot six-5"></div>
+                <div class="dot six-6"></div>
+              </div>
+            </div>
+      </div>
     </div>
-    <div class="col-sm-8">
-      <h2>Categoria selezionata: {{ this.catShow }}</h2>
-      <p class="fs-2" *ngIf="this.cat == 'P'"> Sfida: <span [class.t-red]="this.card?.p?.value">{{ this.card?.p?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.p?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
-        <i *ngIf="!blur" class="fas fa-eye"></i>
-        <i *ngIf="blur" class="fas fa-eye-slash"></i>
-      </button></p>
-      <p class="fs-2" *ngIf="this.cat == 'O'"> Sfida: <span [class.t-red]="this.card?.o?.value">{{ this.card?.o?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.o?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
-        <i *ngIf="!blur" class="fas fa-eye"></i>
-        <i *ngIf="blur" class="fas fa-eye-slash"></i>
-      </button></p>
-      <p class="fs-2" *ngIf="this.cat == 'A'"> Sfida: <span [class.t-red]="this.card?.a?.value">{{ this.card?.a?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.a?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
-        <i *ngIf="!blur" class="fas fa-eye"></i>
-        <i *ngIf="blur" class="fas fa-eye-slash"></i>
-      </button></p>
-      <p class="fs-2" *ngIf="cat == '?'"> Sfida: <span [class.t-red]="this.card?.u?.value">{{ this.card?.u?.value == 0 ? 'No' : 'Si' }}</span><br> Parola: <span [class.blur]="blur">{{ this.card?.u?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
-        <i *ngIf="!blur" class="fas fa-eye"></i>
-        <i *ngIf="blur" class="fas fa-eye-slash"></i>
-      </button></p>
-      <p class="fs-2" *ngIf="this.cat == 'S'"> Sfida: <span class="t-red">Si</span> <br> Parola: <span [class.blur]="blur">{{ this.card?.s?.word }}</span><button class="btn btn-sm eye-button" (click)="toggleBlur()">
-        <i *ngIf="!blur" class="fas fa-eye"></i>
-        <i *ngIf="blur" class="fas fa-eye-slash"></i>
-      </button></p>
-
+    <div class="row my-2">
+      <div class="col-sm-12">
+        <mat-progress-bar
+          [color]="color"
+          [mode]="mode"
+          [value]="value"
+          [bufferValue]="bufferValue">
+        </mat-progress-bar>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <mat-progress-bar
-        [color]="color"
-        [mode]="mode"
-        [value]="value"
-        [bufferValue]="bufferValue">
-      </mat-progress-bar>
-    </div>
-  </div>
 </div>
-<div class="footer">
+<div class="footer mt-auto">
   <p>Fatto dal Moroder con amore</p>
 </div>

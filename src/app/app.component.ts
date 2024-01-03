@@ -1,29 +1,42 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
-import { Subscription, interval, map, takeWhile, timer } from 'rxjs';
-import { A, O, P, S, U, Card } from 'src/dto/carddto';
-import { MatSnackBar } from '@angular/material/snack-bar';
-// Import the necessary modules
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Subscription, interval } from 'rxjs';
+import { A, O, P, S, U, Card, CardToShow } from 'src/dto/carddto';
+import { MessageService } from 'primeng/api';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('squeezeExpand', [
+      transition('normal <=> squeezed', animate('0.82s cubic-bezier(.36,.07,.19,.97)', keyframes([
+      style({ transform: 'translate3d(-1px, 0, 0)', offset: 0.1 }),
+      style({ transform: 'translate3d(2px, 0, 0)', offset: 0.2 }),
+      style({ transform: 'translate3d(-4px, 0, 0)', offset: 0.3 }),
+      style({ transform: 'translate3d(4px, 0, 0)', offset: 0.4 }),
+      style({ transform: 'translate3d(-4px, 0, 0)', offset: 0.5 }),
+      style({ transform: 'translate3d(4px, 0, 0)', offset: 0.6 }),
+      style({ transform: 'translate3d(-4px, 0, 0)', offset: 0.7 }),
+      style({ transform: 'translate3d(2px, 0, 0)', offset: 0.8 }),
+      style({ transform: 'translate3d(-1px, 0, 0)', offset: 0.9 })
+    ])))
+    ])
+  ]
 })
-
 
 export class AppComponent implements OnInit {
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private messageService: MessageService) { }
 
-  showSnackbar() {
-    this.snackBar.open('Sfida! Giocano tutti, niente tempo... Let\'s go!', 'Chiudi', {
-      duration: 3000, // Durata in millisecondi
-      panelClass: ['custom-snackbar'] // Aggiungi una classe personalizzata per stili aggiuntivi
-    });
+  buttonState: string = "normal";
+
+  showTopCenter() {
+    this.messageService.clear();
+    this.messageService.add({ key: 'tc', severity: 'info', summary: 'Sfida!', detail: 'Giocano tutti, niente tempo... Let\'s go!' });
   }
 
   curSec: number = 0;
@@ -33,13 +46,14 @@ export class AppComponent implements OnInit {
   bufferValue = 100;
   dice: number | undefined;
 
-  timer: number = 65;
+  timer: number = 5;
   sub: Subscription | undefined;
   check: boolean = false;
   blur: boolean = false;
 
   categories: string[][] = [['P', 'yellow', 'Persone/Luoghi/Animali'], ['O', 'navy', 'Oggetti'], ['A', 'grey', 'Azioni'], ['?', 'green', 'Difficoltà'], ['S', 'red', 'Sfida']];
 
+  cardToShow: CardToShow = new CardToShow();
   card: Card | undefined;
   cat: string = "";
   catShow: string = "";
@@ -130,35 +144,57 @@ export class AppComponent implements OnInit {
     this.blur = false;
     if(this.check) {
       this.sub!.unsubscribe();
+      this.check = !this.check;
     }
+
+    let challenge = <HTMLVideoElement> document.getElementById("challenge");
 
     switch(cat) {
       case 'P':
+        this.cardToShow.value = this.card!.p!.value == 0 ? 'NO' : 'SI';
+        this.cardToShow.word = this.card?.p?.word;
         if(!this.card?.p?.value)
           this.startTimer();
-        else
-          this.showSnackbar();
+        else {
+          this.showTopCenter();
+          challenge.play();
+        }
         break;
       case 'O':
+        this.cardToShow.value = this.card!.o!.value == 0 ? 'NO' : 'SI';
+        this.cardToShow.word = this.card?.o?.word;
         if(!this.card?.o?.value)
           this.startTimer();
-        else
-          this.showSnackbar();
+        else {
+          this.showTopCenter();
+          challenge.play();
+        }
         break;
       case 'A':
+        this.cardToShow.value = this.card!.a!.value == 0 ? 'NO' : 'SI';
+        this.cardToShow.word = this.card?.a?.word;
         if(!this.card?.a?.value)
           this.startTimer();
-        else
-          this.showSnackbar();
+        else {
+          this.showTopCenter();
+          challenge.play();
+        }
         break;
       case '?':
+        this.cardToShow.value = this.card!.u!.value == 0 ? 'NO' : 'SI';
+        this.cardToShow.word = this.card?.u?.word;
         if(!this.card?.u?.value)
           this.startTimer();
-        else
-          this.showSnackbar();
+        else {
+          this.showTopCenter();
+          challenge.play();
+        }
         break;
       case 'S':
-        this.showSnackbar();
+        this.cardToShow.value = 'SI';
+        this.cardToShow.word = this.card?.s?.word;
+        challenge.play();
+        this.showTopCenter();
         break;
     }
   }
@@ -171,15 +207,12 @@ export class AppComponent implements OnInit {
       this.check = true;
       this.value = 100 - sec * 100 / time;
       this.curSec = sec;
+      let timeout = <HTMLVideoElement> document.getElementById("timeout");
 
       if (this.curSec === time) {
-        let audio = new Audio();
-        audio.src = "../assets/sad_trombone.wav";
-        audio.load();
-
+        timeout.play();
         this.sub!.unsubscribe();
         this.check = false;
-        audio.play();
         this.blur = false;
       }
     });
@@ -190,9 +223,22 @@ export class AppComponent implements OnInit {
     this.curSec = 0;
     this.blur = false;
     if(this.check) {
+      this.check = false;
       this.sub!.unsubscribe();
     }
+
+    this.buttonState = (this.buttonState === 'normal') ? 'squeezed' : 'normal';
+
     this.dice = this.randomIntFromInterval(1, 6);
+    console.log("è uscito: ", this.dice);
+
+    var dice  = document.getElementById('dice');
+    for (var i = 1; i <= 6; i++) {
+      dice!.classList.remove('show-' + i);
+      if (this.dice === i) {
+        dice!.classList.add('show-' + i);
+      }
+    }    
   }
 
   setCat(cat: string) {

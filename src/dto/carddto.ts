@@ -43,3 +43,8 @@ export class Card {
   u: U | undefined;
   s: S | undefined;
 }
+
+export class CardToShow {
+  value: string | undefined;
+  word: string | undefined;
+}
