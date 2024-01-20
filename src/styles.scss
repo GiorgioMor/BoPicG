@@ -13,7 +13,29 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
+
+    background-color: var(--background-light);
+    color: var(--text-light);
+    transition: background-color 0.5s, color 0.5s;
 }
 html, body {
     height: 100%;
+}
+
+:root {
+    --background-light: #ffffff;
+    --text-light: #333333;
+    --background-dark: #1a1a1a;
+    --text-dark: #ffffff;
+    
+    --button-dark-text: #ffffff; /* Colore del testo in modalità scura */
+}
+
+body.dark-mode {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
+
+body.dark-mode .btn.eye-button {
+    color: var(--button-dark-text);
 }

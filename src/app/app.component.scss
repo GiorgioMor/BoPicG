@@ -11,11 +11,6 @@
   width: 100%;
   flex-shrink: 0;
 }
-.footer p::after {
-  content: '\2764'; /* Codice Unicode per il carattere del cuore */
-  font-size: 20px; /* Dimensione del cuore */
-  margin-right: 5px; /* Spazio tra il cuore e il testo */
-}
 
 .footer p {
   margin: 0;
@@ -24,9 +19,13 @@
   align-items: center; /* Centra il cuore verticalmente */
 }
 
+.footer p .heart {
+  font-size: 20px;
+}
+
 .blur {
   color: transparent;
-  text-shadow: 0 0 13px #000;
+  text-shadow: 0 0 25px #000;
 }
 
 /* Aggiungi queste regole nel tuo stile CSS */
@@ -37,18 +36,10 @@
   transition: color 0.3s ease-in-out;
 }
 
-.eye-button:hover {
-  color: #3498db; /* Cambia colore all'hover */
-}
-
 /* Stile aggiuntivo per l'icona dell'occhio */
 .fas.fa-eye,
 .fas.fa-eye-slash {
   transition: transform 0.3s ease-in-out;
-}
-
-.fas.fa-eye-slash {
-  transform: scale(0.8); /* Rimpicciolisci l'occhio sbarrato */
 }
 
 .t-red {

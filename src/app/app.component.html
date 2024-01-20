@@ -30,10 +30,11 @@
       <div class="col-sm-8">
         <h2 class="my-0">Categoria selezionata: {{ this.catShow }}</h2>
         <p class="fs-2 my-1">
-          Sfida: <span [class.t-red]="this.cardToShow.value === 'SI'">{{ this.cardToShow.value }}</span>
+          Sfida: <span [class.t-red]="this.pickedWord.num === 1">{{ this.pickedWord.num !== -1 ? (this.pickedWord.num === 1 ? 'Si' : 'No') : '' }}
+</span>
           <br>
-          Parola: <span [class.blur]="blur">{{ this.cardToShow.word }}</span>
-          <button *ngIf="this.cardToShow.word != null" class="btn btn-sm eye-button" (click)="toggleBlur()">
+          Parola: <span [class.blur]="blur">{{ this.pickedWord.word }}</span>
+          <button *ngIf="this.pickedWord.word != ''" class="btn btn-sm eye-button" (click)="toggleBlur()">
             <i *ngIf="!blur" class="fas fa-eye"></i>
             <i *ngIf="blur" class="fas fa-eye-slash"></i>
           </button>
@@ -88,5 +89,5 @@
   </div>
 </div>
 <div class="footer mt-auto">
-  <p>Fatto dal Moroder con amore</p>
+  <p>Fatto dal Moroder con amore <span (click)="toggleDarkMode()" class="heart">&#x2764;</span></p>
 </div>
